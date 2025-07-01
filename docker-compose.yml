@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  log-generator:
+    build:
+      context: .
+    container_name: log_emitter
+    volumes:
+      - ./fluent-bit/logs:/fluentbit/logs
+    depends_on:
+      - fluent-bit
+
+  fluent-bit:
+    image: cr.fluentbit.io/fluent/fluent-bit:2.2.2
+    container_name: fluent_bit
+    volumes:
+      - ./fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf:ro
+      - ./fluent-bit/parsers.conf:/fluent-bit/etc/parsers.conf:ro
+      - ./fluent-bit/logs:/fluentbit/logs
+    ports:
+      - "2020:2020"
